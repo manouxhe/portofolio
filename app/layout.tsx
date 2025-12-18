@@ -1,3 +1,18 @@
+import Navbar from "@/components/navbar";
+
+import { Playfair_Display } from "next/font/google";
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["600", "700"],
+});
+import { Inter } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+});
+
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -25,8 +40,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`
+          ${geistSans.variable}
+          ${geistMono.variable}
+          ${playfair.className}
+          ${inter.className}
+          antialiased
+          bg-[oklch(94.8%_0.028_342.258)]
+
+
+        `}
       >
+        <Navbar />
         {children}
       </body>
     </html>
