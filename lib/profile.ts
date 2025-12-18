@@ -1,43 +1,54 @@
 "use server";
+
+import { db } from "@/db";
+import { profilesTable } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
-/* ========= TYPE ========= */
-export type Profile = {
-  id: number;
-  name: string;
-  role: string;
-};
-/* ========= STOCKAGE (serveur uniquement) ========= */
-let profiles: Profile[] = [];
-let nextId = 1;
-/* ========= CREATE ========= */
+import { headers } from "next/headers";
+
+/* ===== READ ===== */
+export async function getProfiles() {
+  return await db
+    .select()
+    .from(profilesTable)
+   
+}
+
+/* ===== CREATE ===== */
 export async function createProfile(form: FormData) {
   const name = String(form.get("name"));
-  const role = String(form.get("role"));
+  const telefon = String(form.get("telefon"));
+  const number = String(form.get("number"));
+  const time = String(form.get("time"));
 
-  profiles.push({
-    id: nextId++,
-    name,
-    role,
-  });
-  redirect("/about");
+  await db.insert(profilesTable).values({ name, telefon, number, time });
+
+  redirect((await headers()).get("referer") ?? "/");
 }
-/* ========= READ ========= */
-export async function getProfiles(): Promise<Profile[]> {
-  return profiles;
-}
-/* ========= UPDATE ========= */
-export async function updateProfile(id: number, form: FormData) {
+
+/* ===== UPDATE ===== */
+export async function updateProfile(form: FormData) {
+  const id = String(form.get("id"));
   const name = String(form.get("name"));
-  const role = String(form.get("role"));
+  const telefon = String(form.get("telefon"));
+  const number = String(form.get("number"));
+  const time = String(form.get("time"));
 
-  const profile = profiles.find((p) => p.id === id);
-  if (!profile) return;
-  profile.name = name;
-  profile.role = role;
-  redirect("/about");
+  await db
+    .update(profilesTable)
+    .set({ name, telefon, number, time })
+    .where(eq(profilesTable.id, id));
+
+  redirect((await headers()).get("referer") ?? "/");
 }
-/* ========= DELETE ========= */
-export async function deleteProfile(id: number) {
-  profiles = profiles.filter((p) => p.id !== id);
-  redirect("/about");
+
+/* ===== DELETE ===== */
+export async function deleteProfile(form: FormData) {
+  const id = String(form.get("id"));
+
+  await db
+    .delete(profilesTable)
+    .where(eq(profilesTable.id, id));
+
+  redirect((await headers()).get("referer") ?? "/");
 }
