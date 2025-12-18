@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { updateProfile, deleteProfile } from "@/lib/profile";
+import { link } from "fs";
 
 type ProfileCardProps = {
   id: string;
@@ -35,7 +36,7 @@ export default function ProfileCard({
 
           <div className="flex gap-4 mt-4">
             <button
-              onClick={() => setIsEditing(true)}
+              onClick={() => setIsEditing(true) }
               className="text-blue-600"
             >
               Edit

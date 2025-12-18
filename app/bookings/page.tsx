@@ -7,9 +7,9 @@ export default async function AfficheProfilePage() {
 
   return (
     <main className="max-w-2xl mx-auto p-8">
-      <h1 className="text-3xl font-bold mb-6">reservation</h1>
+      <h1 className="text-3xl font-bold mb-6">All the reservations</h1>
 
-
+      
       {profiles.map((profile) => (
         <ProfileCard
           key={profile.id}
